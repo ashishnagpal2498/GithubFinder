@@ -2,45 +2,39 @@ import React ,{Component} from 'react';
 import './App.css';
 import Navbar from "./components/layout/Navbar";
 import Users from "./components/user/Users";
+import Search from "./components/search/Search";
+import Spinner from "./components/layout/Spinner";
+import axios from "axios"
 class App extends Component {
 
-    static state ={
-        users: []
+    state ={
+        users: [],
+        loading: false
+    }
+    //Search Users
+    searchUser = async (text)=>{
+        this.setState({loading:true})
+        console.log(text);
+      const res = await axios.get(`https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
+        &client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`)
+        console.log(res.data);
+        this.setState({users:res.data.items})
+        this.setState({loading:false})
+    }
+    //Clear Users
+    clearUser = ()=>{
+        this.setState({users:[]})
     }
     render() {
-        const users =[
-            {
-                login: "mojombo",
-                avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4",
-                html_url: "https://github.com/mojombo",
-            },
-            {
-                login: "defunkt",
-                avatar_url: "https://avatars0.githubusercontent.com/u/2?v=4",
-                html_url: "https://github.com/defunkt",
-            }
-            ,{
-                login: "pjhyett",
-                avatar_url: "https://avatars0.githubusercontent.com/u/3?v=4",
-                html_url: "https://github.com/pjhyett",
-            },
-            {
-                login: "wycats",
-                avatar_url: "https://avatars0.githubusercontent.com/u/4?v=4",
-                html_url: "https://github.com/wycats",
-            }
-
-
-        ]
         return (
             <div>
                 <Navbar/>
-            <Users users={users}/>
+                <Search searchUser={this.searchUser} users={this.state.users} clearUser={this.clearUser}/>
+                {this.state.loading && <Spinner/>}
+                <Users users={this.state.users}/>
             </div>
         );
     }
-
-
 }
 
 export default App;
