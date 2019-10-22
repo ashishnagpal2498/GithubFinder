@@ -4,7 +4,7 @@ import Navbar from "./components/layout/Navbar";
 import Users from "./components/user/Users";
 import Search from "./components/search/Search";
 import Spinner from "./components/layout/Spinner";
-import axios from "axios"
+import axios from "axios";
 class App extends Component {
 
     state ={
@@ -14,6 +14,7 @@ class App extends Component {
     //Search Users
     searchUser = async (text)=>{
         this.setState({loading:true})
+        this.setState({users:[]})
         console.log(text);
       const res = await axios.get(`https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
         &client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`)
@@ -27,11 +28,13 @@ class App extends Component {
     }
     render() {
         return (
-            <div>
+            <div >
                 <Navbar/>
+                <div className={"container"}>
                 <Search searchUser={this.searchUser} users={this.state.users} clearUser={this.clearUser}/>
                 {this.state.loading && <Spinner/>}
                 <Users users={this.state.users}/>
+                </div>
             </div>
         );
     }
