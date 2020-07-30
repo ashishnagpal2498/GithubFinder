@@ -14,10 +14,13 @@ class Search extends Component {
     static propTypes = {
         searchUser : PropTypes.func.isRequired,
         users: PropTypes.array.isRequired,
+        clearUser: PropTypes.func.isRequired
     }
 
     triggerChange= ()=> {
+        if(this.state.text)
         this.props.searchUser(this.state.text)
+        else this.props.clearUser();
     }
     onHandler = (event)=> {
         clearTimeout(this.timer);
@@ -33,6 +36,7 @@ class Search extends Component {
     // }
     //clear Users
     clearUsers = ()=>{
+        this.setState({text:""});
         this.props.clearUser()
     }
     render() {

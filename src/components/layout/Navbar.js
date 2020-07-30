@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 import PropTypes from "prop-types"
 class Navbar extends Component {
    static propTypes ={
@@ -15,8 +16,8 @@ class Navbar extends Component {
                 <h2><i className={this.props.icon}/> {this.props.title}</h2>
                 <ul>
                     <li>
-                        <a href={"/"}>HOME</a>
-                        <a href={"/about"}>About</a>
+                        <Link to={"/"}>HOME</Link>
+                        <Link to={"/about"}>About</Link>
                     </li>
                 </ul>
             </nav>
