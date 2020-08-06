@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 
 class UserItem extends Component {
     render() {
@@ -7,7 +8,7 @@ class UserItem extends Component {
             <div className={"card all-center"}>
                 <img className={"round-img"} src={avatar_url} alt="" style={{width:"60px"}}/>
                 <h4>{login}</h4>
-                <a href={html_url} className={"btn btn-dark"}>MORE</a>
+                <Link to={`/user/${login}`} className={"btn btn-dark"}>MORE</Link>
             </div>
         );
     }
