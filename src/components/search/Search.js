@@ -1,17 +1,20 @@
-import React,{useState} from 'react';
-import PropTypes from "prop-types"
+import React,{useState,useContext} from 'react';
 import DisplaySearchedUser from "../DisplaySearchedUser";
+import GithubContext from "../../context/Github/githubContext";
 
 const WAIT_INTERVAL = 1000;
 
-const Search = ({users,searchUser, clearUser}) => {
+const Search = () => {
+    const  githubContext = useContext(GithubContext);
 
     const [text,searchText] = useState("");
     const [timer,setTimer] = useState(0);
+
+    const {clearUsers,searchUsers,users} = githubContext
     const triggerChange = ()=> {
         if(text)
-        searchUser(text)
-        else clearUser();
+        searchUsers(text);
+        else clearUsers();
     }
     const onHandler = (event)=> {
         setTimer(clearTimeout(timer));
@@ -19,10 +22,9 @@ const Search = ({users,searchUser, clearUser}) => {
     //    Timer
         setTimer(setTimeout(triggerChange, WAIT_INTERVAL));
     }
-    //clear Users
-    const clearUsers = ()=>{
+    const clearU = () =>{
         searchText('');
-        clearUser()
+        clearUsers();
     }
         return (
             <div>
@@ -30,17 +32,12 @@ const Search = ({users,searchUser, clearUser}) => {
                     <input type={"text"} name="text" placeholder="Search Here" value={text} onChange={onHandler}/>
                     {/*<input type={"submit"} className={"btn btn-dark btn-block"} style={{display:"block"}}/>*/}
                 </form>
-                {users.length >0 && <button onClick={clearUsers} className={"btn btn-light btn-block"}>Clear</button> }
+                {users.length >0 && <button onClick={clearU} className={"btn btn-light btn-block"}>Clear</button> }
                 {text.length >0 && <DisplaySearchedUser searchedUser={text}/>}
 
             </div>
 
         );
 };
-Search.propTypes = {
-    searchUser : PropTypes.func.isRequired,
-    users: PropTypes.array.isRequired,
-    clearUser: PropTypes.func.isRequired
-}
 
 export default Search;

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, {useContext} from 'react';
 import UserItem from "./UserItem";
-class Users extends Component {
-
-    render() {
-        const {users} = this.props
+import GithubContext from "../../context/Github/githubContext";
+const Users = () => {
+    const githubContext = useContext(GithubContext);
+    const {users} = githubContext;
         return (
             <div style={UsersStyle}>
                 {users.map((item)=>(
@@ -11,7 +11,6 @@ class Users extends Component {
                 ))}
             </div>
         );
-    }
 }
 const UsersStyle ={
     display : "grid",
