@@ -1,23 +1,15 @@
-import React, {Component, Fragment} from 'react';
+import React, {Fragment,useEffect} from 'react';
 import {Link} from "react-router-dom";
 import Spinner from "../layout/Spinner";
 import PropTypes from 'prop-types'
 import Repos from "../Repos/Repos";
-class User extends Component {
-    componentDidMount() {
-        this.props.getUser(this.props.match.params.login);
-        this.props.getUserRepos(this.props.match.params.login);
 
-    }
-    static propTypes = {
-        loading: PropTypes.bool.isRequired,
-        getUser: PropTypes.func.isRequired,
-        user: PropTypes.object.isRequired,
-        getUserRepos: PropTypes.func.isRequired,
-        repos: PropTypes.array.isRequired,
-    };
-
-    render() {
+const User = ({user,getUser,getUserRepos,loading,repos,match}) => {
+    useEffect(() => {
+        getUser(match.params.login);
+        getUserRepos(match.params.login);
+        //eslint-disable-next-line
+    },[])
         const {
             name,
             avatar_url,
@@ -32,8 +24,7 @@ class User extends Component {
             following,
             public_repos,
             public_gists
-        } = this.props.user;
-        const {loading,repos} = this.props;
+        } = user;
         if(loading) return <Spinner/>
         return (
             <React.Fragment>
@@ -42,7 +33,7 @@ class User extends Component {
                 {hireable ? <i className={"fas fa-check text-green"}/> : <i className={"fas fa-times-circle text-red"}/> }
                 <div className="card grid-2">
                     <div className={"all-center"}>
-                        <img src={avatar_url} className={"round-img"} style={{width:"140px"}} />
+                        <img src={avatar_url} className={"round-img"} style={{width:"140px"}} alt="avatar round" />
                         <h1>{name}</h1>
                         <h4>{location}</h4>
                     </div>
@@ -80,7 +71,14 @@ class User extends Component {
                 <Repos repos={repos} />
             </React.Fragment>
         );
-    }
 }
+
+User.propTypes = {
+    loading: PropTypes.bool.isRequired,
+    getUser: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+    getUserRepos: PropTypes.func.isRequired,
+    repos: PropTypes.array.isRequired,
+};
 
 export default User;

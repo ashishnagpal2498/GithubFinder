@@ -1,59 +1,46 @@
-import React, {Component} from 'react';
+import React,{useState} from 'react';
 import PropTypes from "prop-types"
 import DisplaySearchedUser from "../DisplaySearchedUser";
 
 const WAIT_INTERVAL = 1000;
 
-class Search extends Component {
-    state = {
-        text: ""
-    }
-    componentWillMount() {
-        this.timer = null;
-    }
-    static propTypes = {
-        searchUser : PropTypes.func.isRequired,
-        users: PropTypes.array.isRequired,
-        clearUser: PropTypes.func.isRequired
-    }
+const Search = ({users,searchUser, clearUser}) => {
 
-    triggerChange= ()=> {
-        if(this.state.text)
-        this.props.searchUser(this.state.text)
-        else this.props.clearUser();
+    const [text,searchText] = useState("");
+    const [timer,setTimer] = useState(0);
+    const triggerChange = ()=> {
+        if(text)
+        searchUser(text)
+        else clearUser();
     }
-    onHandler = (event)=> {
-        clearTimeout(this.timer);
-        this.setState({[event.target.name]: event.target.value})
+    const onHandler = (event)=> {
+        setTimer(clearTimeout(timer));
+        searchText(event.target.value);
     //    Timer
-        this.timer = setTimeout(this.triggerChange, WAIT_INTERVAL);
-
+        setTimer(setTimeout(triggerChange, WAIT_INTERVAL));
     }
-
-    // onSubmit = (ev)=>{
-    //     ev.preventDefault();
-    //
-    // }
     //clear Users
-    clearUsers = ()=>{
-        this.setState({text:""});
-        this.props.clearUser()
+    const clearUsers = ()=>{
+        searchText('');
+        clearUser()
     }
-    render() {
-        const {users} = this.props
         return (
             <div>
-                <form className="form p-1" style={{width:"100%"}} onSubmit={this.onSubmit}>
-                    <input type={"text"} name="text" placeholder="Search Here" value={this.state.text} onChange={this.onHandler}/>
+                <form className="form p-1" style={{width:"100%"}}>
+                    <input type={"text"} name="text" placeholder="Search Here" value={text} onChange={onHandler}/>
                     {/*<input type={"submit"} className={"btn btn-dark btn-block"} style={{display:"block"}}/>*/}
                 </form>
-                {users.length>0 && <button onClick={this.clearUsers} className={"btn btn-light btn-block"}>Clear</button> }
-                {this.state.text.length>0 && <DisplaySearchedUser searchedUser={this.state.text}/>}
+                {users.length >0 && <button onClick={clearUsers} className={"btn btn-light btn-block"}>Clear</button> }
+                {text.length >0 && <DisplaySearchedUser searchedUser={text}/>}
 
             </div>
 
         );
-    }
+};
+Search.propTypes = {
+    searchUser : PropTypes.func.isRequired,
+    users: PropTypes.array.isRequired,
+    clearUser: PropTypes.func.isRequired
 }
 
 export default Search;

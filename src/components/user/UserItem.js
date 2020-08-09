@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 class UserItem extends Component {
     render() {
-        const {login, avatar_url,html_url} = this.props.user
+        const {login, avatar_url} = this.props.user
         return (
             <div className={"card all-center"}>
                 <img className={"round-img"} src={avatar_url} alt="" style={{width:"60px"}}/>
